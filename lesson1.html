@@ -41,24 +41,41 @@
         .on("mouseout", function(){d3.select(this).style("fill", "white");});
   }
 
-  var w = 500;
-  var h = 100;
+  var width = 500;
+  var height = 100;
   var padding = 2;
-  var data = [5, 10, 15, 20, 25];
+  var array1 = [5, 10, 15, 20, 35];
 
   var svg = d3.select('body')
     .append('svg')
-    .attr('width', w)
-    .attr('height', h);
+    .attr('width', width)
+    .attr('height', height);
 
   svg.selectAll('rect')
-    .data(data)
+    .data(array1) // << this will create 4 'stuff' because you have 4 'stuff' in the array, the value for each stuff do not matter
     .enter() // creat if not exist
     .append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', 50)
-      .attr('height', 100);
+                    // what is this d?
+      .attr('x', function(data, array_position ) {
+
+          // array index position * index.value >> x STARTING POSITION
+          // <rect x="0" y="0" width="50" height="100"></rect>
+          // <rect x="21" y="0" width="50" height="100"></rect>
+          // <rect x="42" y="0" width="50" height="100"></rect>
+          // <rect x="63" y="0" width="50" height="100"></rect>
+          // <rect x="84" y="0" width="50" height="100"></rect>
+        // return (array_position * 21);
+          // so the line below is a way of evenly spacing each rectangle apart
+          return ( array_position * (width / array1.length) );
+
+      })
+      .attr('y', function(data){
+        return height - data;
+      })
+      .attr('width', width / array1.length - padding)
+      .attr('height', function(data) {
+        return data;
+      });
 
 
 
